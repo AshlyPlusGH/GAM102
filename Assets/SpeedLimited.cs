@@ -3,7 +3,7 @@ using UnityEngine;
 public class SpeedLimited : MonoBehaviour
 {
 
-    public Vector2 SpeedLimit;
+    public float SpeedLimit;
     private Rigidbody2D rb;
     public bool isGlobalSpeedLimited = true;
 
@@ -16,11 +16,22 @@ public class SpeedLimited : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 velocity = rb.velocity;
-        if (velocity.magnitude > Global.SpeedLimit)
-        {
-            velocity = velocity.normalized * Global.SpeedLimit;
-            rb.velocity = velocity;
+        if (isGlobalSpeedLimited){
+            Vector2 velocity = rb.velocity;
+            if (velocity.magnitude > Global.SpeedLimit)
+            {
+                velocity = velocity.normalized * Global.SpeedLimit;
+                rb.velocity = velocity;
+            }
         }
+        else{
+            Vector2 velocity = rb.velocity;
+            if (velocity.magnitude > SpeedLimit)
+            {
+                velocity = velocity.normalized * SpeedLimit;
+                rb.velocity = velocity;
+            }
+        }
+        
     }
 }
