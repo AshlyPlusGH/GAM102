@@ -9,15 +9,15 @@ public class Zoom : MonoBehaviour
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll > 0f)
+        if (scroll < 0f)
         {
             // Scroll up
             gameObject.GetComponent<Camera>().orthographicSize += 1;
         }
-        else if (scroll < 0f)
+        else if (scroll > 0f)
         {
             // Scroll down
-            if (gameObject.GetComponent<Camera>().orthographicSize > 0){
+            if (gameObject.GetComponent<Camera>().orthographicSize > 1){
                 gameObject.GetComponent<Camera>().orthographicSize -= 1;
             }
         }
