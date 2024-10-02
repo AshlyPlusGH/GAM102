@@ -1,5 +1,6 @@
 using System.Reflection.Emit;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpaceshipController : MonoBehaviour
 {
@@ -11,7 +12,11 @@ public class SpaceshipController : MonoBehaviour
     public float minVelocity = 0.1f; // Minimum velocity to apply drag
     public float minAngularVelocity = 0.1f;
     public float SpeedLimit;
+    public float SlipstreamJumpTime = 10;
+    private float Timer = 0;
     private Rigidbody2D rb;
+    private ParticleSystem ps;
+    private bool isJumping = false;
 
     //OutputTesting
     public float CurrentVelocityMagnitude;
@@ -19,10 +24,12 @@ public class SpaceshipController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        ps = GetComponentInChildren<ParticleSystem>();
     }
 
     void Update()
     {
+        Timer += Time.deltaTime;
         Vector2 velocity = rb.velocity;
         CurrentVelocityMagnitude = rb.velocity.magnitude;
         // Apply thrust
@@ -56,6 +63,22 @@ public class SpaceshipController : MonoBehaviour
         else
         {
             rb.drag = 0f;
+        }
+
+        // Slipstream Jump
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Timer = 0;
+            ps.Play();
+
+            isJumping = true;
+        }
+
+        if (Timer >= SlipstreamJumpTime && isJumping){
+            DontDestroyOnLoad(gameObject);
+            SceneManager.LoadScene("Slipstream");
+
+            isJumping = false;
         }
 
         // Set drag to zero if velocity is small enough
